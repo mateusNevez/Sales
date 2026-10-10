@@ -1,92 +1,103 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard de Vendas</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2563eb">
+<title>Dashboard de Vendas</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-light d-flex align-items-center min-vh-100">
+<body>
 
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-8 col-lg-7">
+  <main class="app">
 
-      <div class="card shadow-sm border-0 rounded-4">
-        <div class="card-body p-4 p-md-5">
+    <!-- ===== Cabeçalho ===== -->
+    <header class="topo">
+      <div class="topo__marca">
+        <span class="logo" aria-hidden="true">V</span>
+        <div class="topo__texto">
+          <h1>Dashboard de Vendas</h1>
+          <p class="topo__data" id="dataAtual">—</p>
+        </div>
+      </div>
+      <span class="badge-dia" id="badgeDia">Hoje</span>
+    </header>
 
-          <!-- cabeçalho -->
-          <div class="d-flex align-items-center gap-2 mb-4 pb-2 border-bottom">
-            <h5 class="mb-0 fw-semibold">
-              <i class="bi bi-bar-chart-fill me-2 text-primary"></i>Vendas do dia
-            </h5>
-            <span id="data" class="badge bg-secondary bg-opacity-10 text-dark ms-auto">
-              <i class="bi bi-clock me-1"></i>
-            </span>
-          </div>
+    <!-- ===== Cards de resumo ===== -->
+    <section class="cards" aria-label="Resumo de vendas">
+      <article class="card card--azul">
+        <span class="card__label">Total de vendas</span>
+        <strong class="card__valor" id="totalVendas">R$ 0,00</strong>
+        <span class="card__sub" id="subTotal">0 registros</span>
+      </article>
 
-          <!-- total -->
-          <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded-3 mb-4">
-            <span class="fw-semibold text-secondary">
-              <i class="bi bi-currency-dollar me-1"></i> Total
-            </span>
-            <span class="h2 mb-0 fw-bold" id="totalVendas">R$ 0,00</span>
-          </div>
+      <article class="card">
+        <span class="card__label">Vendas hoje</span>
+        <strong class="card__valor" id="vendasHoje">R$ 0,00</strong>
+        <span class="card__sub" id="qtdHoje">0 vendas</span>
+      </article>
 
-          <!-- input + botão adicionar -->
-          <div class="input-group mb-3">
-            <input type="text" id="valorVenda" class="form-control form-control-lg" placeholder="Ex: 12,50" aria-label="Valor da venda" />
-            <button class="btn btn-primary btn-lg" id="adicionarBtn" type="button">
-              <i class="bi bi-plus-lg me-1"></i>Adicionar
-            </button>
-          </div>
+      <article class="card">
+        <span class="card__label">Qtd. de vendas</span>
+        <strong class="card__valor" id="qtdVendas">0</strong>
+        <span class="card__sub">Total registrado</span>
+      </article>
 
-          <!-- ações secundárias -->
-          <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-            <button class="btn btn-outline-secondary" id="ordenarBtn" type="button">
-              <i class="bi bi-arrow-up-down me-1"></i>Ordenar
-            </button>
-            <button class="btn btn-outline-danger" id="limparTudoBtn" type="button">
-              <i class="bi bi-trash3 me-1"></i>Limpar tudo
-            </button>
-            <span class="badge bg-secondary bg-opacity-10 text-dark ms-auto" id="contagemVendas">0 vendas</span>
-          </div>
+      <article class="card">
+        <span class="card__label">Ticket médio</span>
+        <strong class="card__valor" id="ticketMedio">R$ 0,00</strong>
+        <span class="card__sub">Por venda</span>
+      </article>
+    </section>
 
-          <!-- última venda -->
-          <div id="ultimaVendaDisplay" class="d-none mb-3">
-            <span class="badge bg-light text-dark border">
-              <i class="bi bi-clock-history me-1"></i>
-              Última: <span id="ultimoValorTexto" class="fw-semibold">R$ 0,00</span>
-            </span>
-          </div>
+    <!-- ===== Formulário ===== -->
+    <section class="painel" aria-label="Cadastro de venda">
+      <form class="form" id="formVenda" autocomplete="off" novalidate>
 
-          <!-- lista de vendas -->
-          <div id="listaVendasContainer" class="mt-3" style="max-height: 350px; overflow-y: auto;">
-            <h6 class="text-secondary mb-2">Vendas realizadas</h6>
-            <div id="listaVendas">
-              <div class="text-center text-muted py-3">Nenhuma venda registrada</div>
-            </div>
-          </div>
+        <div class="campo">
+          <label for="valor">Valor (R$)</label>
+          <input type="number" id="valor" name="valor" step="0.01" min="0.01"
+                 placeholder="0,00" required>
+        </div>
 
-          <!-- rodapé localStorage -->
-          <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center">
-            <small class="text-muted">
-              <i class="bi bi-database me-1"></i>salvo localmente
-            </small>
-            <span class="badge bg-secondary bg-opacity-10 text-dark">
-              <i class="bi bi-check-circle-fill text-success me-1"></i> localStorage
-            </span>
-          </div>
+        <div class="acoes-form">
+          <button type="submit" class="btn btn--azul" id="btnSalvar">Adicionar</button>
+          <button type="button" class="btn btn--cinza" id="btnCancelar" hidden>Cancelar</button>
+        </div>
+      </form>
+    </section>
 
+    <!-- ===== Lista ===== -->
+    <section class="painel" aria-label="Lista de vendas">
+      <div class="lista-topo">
+        <h2>Vendas <span class="contador" id="contadorLista">(0)</span></h2>
+
+        <div class="ordenar">
+          <label for="ordenacao">Ordenar por</label>
+          <select id="ordenacao">
+            <option value="adicao">Ordem de adição</option>
+            <option value="adicao-desc">Adição (mais recentes)</option>
+            <option value="maior">Maior valor</option>
+            <option value="menor">Menor valor</option>
+            <option value="nome-az">Nome (A–Z)</option>
+            <option value="nome-za">Nome (Z–A)</option>
+          </select>
         </div>
       </div>
 
-    </div>
-  </div>
-</div>
+      <ul class="lista" id="listaVendas"></ul>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="script.js"></script>
+      <p class="vazio" id="vazio">
+        Nenhuma venda registrada ainda.<br>
+        <span>Adicione a primeira venda no formulário acima.</span>
+      </p>
+    </section>
+
+  </main>
+
+  <!-- ===== Toast ===== -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
 </body>
 </html>
